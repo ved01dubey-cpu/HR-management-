@@ -3,13 +3,15 @@ const { apiResponse, apiError } = require('../utils/apiResponse');
 
 const register = async (req, res) => {
     try {
-        const { email, password, name, role } = req.body;
+        const { email, password, name, role, department, phone, address, joiningDate, employmentType, salary, manager, status } = req.body;
 
         if (!email || !password || !name) {
             return apiError(res, 400, 'All fields are required');
         }
 
-        const data = await authService.registerUser(email, password, name, role);
+        const data = await authService.registerUser(
+            email, password, name, role, department, phone, address, joiningDate, employmentType, salary, manager, status
+        );
         return apiResponse(res, 201, 'User registered successfully', data);
     } catch (error) {
         return apiError(res, 400, error.message);

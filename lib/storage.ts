@@ -6,6 +6,19 @@ export interface User {
   role: 'employee' | 'admin';
   department: string;
   password: string;
+  // Extended Profile
+  phoneNumber?: string;
+  address?: string;
+  joiningDate?: string;
+  employmentType?: 'Full-time' | 'Intern' | 'Contract';
+  salary?: string;
+  manager?: string;
+  status?: 'Active' | 'On Leave' | 'Resigned';
+  documents?: {
+    resume?: string;
+    offerLetter?: string;
+    idProof?: string;
+  };
 }
 
 export interface AttendanceRecord {
@@ -32,7 +45,7 @@ export interface LeaveRequest {
 
 // Storage Keys
 const STORAGE_KEYS = {
-  USERS: 'attendance_users',
+  USERS: 'attendance_users_v2',
   ATTENDANCE: 'attendance_records',
   LEAVE_REQUESTS: 'leave_requests',
   CURRENT_USER: 'current_user',
@@ -42,53 +55,46 @@ const STORAGE_KEYS = {
 const mockUsers: User[] = [
   {
     id: '1',
-    name: 'John Smith',
-    email: 'john@company.com',
-    role: 'employee',
-    department: 'Engineering',
-    password: 'password123',
-  },
-  {
-    id: '2',
-    name: 'Sarah Johnson',
-    email: 'sarah@company.com',
-    role: 'employee',
-    department: 'Design',
-    password: 'password123',
-  },
-  {
-    id: '3',
-    name: 'Michael Brown',
-    email: 'michael@company.com',
-    role: 'employee',
-    department: 'Marketing',
-    password: 'password123',
-  },
-  {
-    id: '4',
     name: 'Admin User',
-    email: 'admin@company.com',
+    email: 'admin@hr.com',
     role: 'admin',
     department: 'HR',
-    password: 'admin123',
+    password: 'Admin@123',
   },
 ];
+
+export function addUser(user: Omit<User, 'id'>): User {
+  const users = getUsers();
+  const newUser: User = { ...user, id: Date.now().toString() };
+  users.push(newUser);
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+  }
+  return newUser;
+}
+
+export function deleteUser(userId: string): void {
+  const users = getUsers().filter(u => u.id !== userId);
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+  }
+}
 
 // Generate mock attendance for past 30 days
 function generateMockAttendance(): AttendanceRecord[] {
   const records: AttendanceRecord[] = [];
   const statuses: AttendanceRecord['status'][] = ['present', 'wfh', 'leave', 'present', 'present'];
-  
+
   mockUsers.forEach(user => {
     if (user.role === 'employee') {
       for (let i = 30; i >= 1; i--) {
         const date = new Date();
         date.setDate(date.getDate() - i);
         const dayOfWeek = date.getDay();
-        
+
         // Skip weekends
         if (dayOfWeek === 0 || dayOfWeek === 6) continue;
-        
+
         const status = statuses[Math.floor(Math.random() * statuses.length)];
         records.push({
           id: `att_${user.id}_${date.toISOString().split('T')[0]}`,
@@ -101,62 +107,27 @@ function generateMockAttendance(): AttendanceRecord[] {
       }
     }
   });
-  
+
   return records;
 }
 
 // Generate mock leave requests
 function generateMockLeaveRequests(): LeaveRequest[] {
-  return [
-    {
-      id: 'leave_1',
-      userId: '1',
-      leaveType: 'annual',
-      startDate: '2026-02-10',
-      endDate: '2026-02-14',
-      reason: 'Family vacation',
-      status: 'pending',
-      createdAt: '2026-01-25T10:00:00Z',
-    },
-    {
-      id: 'leave_2',
-      userId: '2',
-      leaveType: 'sick',
-      startDate: '2026-01-20',
-      endDate: '2026-01-21',
-      reason: 'Not feeling well',
-      status: 'approved',
-      createdAt: '2026-01-19T08:00:00Z',
-      reviewedAt: '2026-01-19T09:00:00Z',
-      reviewedBy: '4',
-    },
-    {
-      id: 'leave_3',
-      userId: '3',
-      leaveType: 'casual',
-      startDate: '2026-02-05',
-      endDate: '2026-02-05',
-      reason: 'Personal work',
-      status: 'rejected',
-      createdAt: '2026-01-28T14:00:00Z',
-      reviewedAt: '2026-01-28T16:00:00Z',
-      reviewedBy: '4',
-    },
-  ];
+  return [];
 }
 
 // Initialize storage with mock data
 export function initializeStorage(): void {
   if (typeof window === 'undefined') return;
-  
+
   if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
     localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(mockUsers));
   }
-  
+
   if (!localStorage.getItem(STORAGE_KEYS.ATTENDANCE)) {
     localStorage.setItem(STORAGE_KEYS.ATTENDANCE, JSON.stringify(generateMockAttendance()));
   }
-  
+
   if (!localStorage.getItem(STORAGE_KEYS.LEAVE_REQUESTS)) {
     localStorage.setItem(STORAGE_KEYS.LEAVE_REQUESTS, JSON.stringify(generateMockLeaveRequests()));
   }
@@ -225,10 +196,10 @@ export function markAttendance(
   const records = getAttendanceRecords();
   const today = new Date().toISOString().split('T')[0];
   const now = new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-  
+
   // Check if already marked today
   const existingIndex = records.findIndex(r => r.userId === userId && r.date === today);
-  
+
   const newRecord: AttendanceRecord = {
     id: `att_${userId}_${today}`,
     userId,
@@ -236,13 +207,13 @@ export function markAttendance(
     status,
     checkInTime: status !== 'leave' ? now : undefined,
   };
-  
+
   if (existingIndex >= 0) {
     records[existingIndex] = newRecord;
   } else {
     records.push(newRecord);
   }
-  
+
   localStorage.setItem(STORAGE_KEYS.ATTENDANCE, JSON.stringify(records));
   return newRecord;
 }
@@ -274,7 +245,7 @@ export function createLeaveRequest(
   reason: string
 ): LeaveRequest {
   const requests = getLeaveRequests();
-  
+
   const newRequest: LeaveRequest = {
     id: `leave_${Date.now()}`,
     userId,
@@ -285,7 +256,7 @@ export function createLeaveRequest(
     status: 'pending',
     createdAt: new Date().toISOString(),
   };
-  
+
   requests.push(newRequest);
   localStorage.setItem(STORAGE_KEYS.LEAVE_REQUESTS, JSON.stringify(requests));
   return newRequest;
@@ -298,7 +269,7 @@ export function updateLeaveRequestStatus(
 ): LeaveRequest | null {
   const requests = getLeaveRequests();
   const index = requests.findIndex(r => r.id === requestId);
-  
+
   if (index >= 0) {
     requests[index] = {
       ...requests[index],
@@ -309,7 +280,7 @@ export function updateLeaveRequestStatus(
     localStorage.setItem(STORAGE_KEYS.LEAVE_REQUESTS, JSON.stringify(requests));
     return requests[index];
   }
-  
+
   return null;
 }
 
@@ -320,19 +291,19 @@ export function filterAttendanceRecords(
   endDate?: string
 ): AttendanceRecord[] {
   let records = getAttendanceRecords();
-  
+
   if (employeeId) {
     records = records.filter(r => r.userId === employeeId);
   }
-  
+
   if (startDate) {
     records = records.filter(r => r.date >= startDate);
   }
-  
+
   if (endDate) {
     records = records.filter(r => r.date <= endDate);
   }
-  
+
   return records.sort((a, b) => b.date.localeCompare(a.date));
 }
 
@@ -341,14 +312,14 @@ export function filterLeaveRequests(
   status?: LeaveRequest['status']
 ): LeaveRequest[] {
   let requests = getLeaveRequests();
-  
+
   if (employeeId) {
     requests = requests.filter(r => r.userId === employeeId);
   }
-  
+
   if (status) {
     requests = requests.filter(r => r.status === status);
   }
-  
+
   return requests.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
 }

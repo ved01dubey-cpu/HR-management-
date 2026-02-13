@@ -1,6 +1,8 @@
 const supabase = require('../config/supabase');
 
-const registerUser = async (email, password, name, role = 'employee') => {
+const registerUser = async (
+    email, password, name, role = 'employee', department, phone, address, joiningDate, employmentType, salary, manager, status
+) => {
     // 1. Sign up user
     const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
@@ -14,15 +16,22 @@ const registerUser = async (email, password, name, role = 'employee') => {
     }
 
     // 2. Create Profile
-    // Note: triggers are better for this, but asked for backend logic.
-    // We use the same ID as auth user
     const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .insert([
             {
                 id: authData.user.id,
                 name,
+                email, // Added email
                 role,
+                department,
+                phone_number: phone,
+                address,
+                joining_date: joiningDate,
+                employment_type: employmentType,
+                salary,
+                manager,
+                status: status || 'Active',
             },
         ])
         .select()

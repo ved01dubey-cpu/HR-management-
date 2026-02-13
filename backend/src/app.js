@@ -8,6 +8,7 @@ const { apiResponse } = require('./utils/apiResponse');
 const authRoutes = require('./routes/auth.routes');
 const attendanceRoutes = require('./routes/attendance.routes');
 const leaveRoutes = require('./routes/leave.routes');
+const employeeRoutes = require('./routes/employees.routes');
 
 const app = express();
 
@@ -21,6 +22,7 @@ app.use(morgan('dev'));
 app.use('/auth', authRoutes);
 app.use('/attendance', attendanceRoutes);
 app.use('/leave', leaveRoutes);
+app.use('/employees', employeeRoutes);
 
 // Health Check
 app.get('/', (req, res) => {

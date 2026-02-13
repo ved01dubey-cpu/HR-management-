@@ -134,43 +134,7 @@ export default function LoginPage() {
           </CardContent>
         </Card>
 
-        {/* Demo Credentials */}
-        <Card className="border-border bg-card/50">
-          <CardHeader className="pb-2 pt-4">
-            <div className="flex items-center gap-2">
-              <Users className="h-4 w-4 text-muted-foreground" />
-              <CardTitle className="text-sm font-medium text-card-foreground">
-                Demo Credentials
-              </CardTitle>
-            </div>
-          </CardHeader>
-          <CardContent className="pt-0 pb-4">
-            <div className="grid gap-3 text-sm">
-              <div className="flex items-center justify-between p-2 rounded bg-secondary/50">
-                <div>
-                  <p className="font-medium text-foreground">Employee</p>
-                  <p className="text-muted-foreground text-xs">
-                    john@company.com
-                  </p>
-                </div>
-                <code className="text-xs bg-background px-2 py-1 rounded text-muted-foreground">
-                  password123
-                </code>
-              </div>
-              <div className="flex items-center justify-between p-2 rounded bg-secondary/50">
-                <div>
-                  <p className="font-medium text-foreground">Admin</p>
-                  <p className="text-muted-foreground text-xs">
-                    admin@company.com
-                  </p>
-                </div>
-                <code className="text-xs bg-background px-2 py-1 rounded text-muted-foreground">
-                  admin123
-                </code>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+
       </div>
     </div>
   );

@@ -6,7 +6,20 @@ create extension if not exists "uuid-ossp";
 create table if not exists public.profiles (
   id uuid references auth.users not null primary key,
   name text not null,
+  email text, -- Added email for easier querying
+  department text,
   role text not null check (role in ('employee', 'admin')) default 'employee',
+  
+  -- Extended Profile Fields
+  phone_number text,
+  address text,
+  joining_date date,
+  employment_type text check (employment_type in ('Full-time', 'Intern', 'Contract')),
+  salary text,
+  manager text,
+  status text check (status in ('Active', 'On Leave', 'Resigned')) default 'Active',
+  documents jsonb, -- Stores { resume, offerLetter, idProof }
+  
   created_at timestamp with time zone default timezone('utc'::text, now()) not null
 );
 
