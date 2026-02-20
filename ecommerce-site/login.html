@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Signup | BharatStore</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .auth-container {
+            max-width: 1000px;
+            margin: 60px auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background: #fff;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-color);
+        }
+
+        .auth-image {
+            background: linear-gradient(135deg, var(--primary-color), #4f46e5);
+            padding: 60px;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .auth-image h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .auth-form-wrapper {
+            padding: 60px;
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .auth-tab {
+            padding-bottom: 15px;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .auth-tab.active {
+            color: var(--primary-color);
+        }
+
+        .auth-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--primary-color);
+        }
+
+        .social-login {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .social-btn {
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-weight: 500;
+            transition: var(--transition);
+        }
+
+        .social-btn:hover {
+            background: var(--bg-alt);
+        }
+
+        .divider {
+            text-align: center;
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .divider span {
+            background: #fff;
+            padding: 0 15px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .auth-container {
+                grid-template-columns: 1fr;
+            }
+
+            .auth-image {
+                display: none;
+            }
+
+            .auth-form-wrapper {
+                padding: 40px 20px;
+            }
+        }
+    </style>
+</head>
+
+<body style="background: var(--bg-alt);">
+
+    <div class="container" style="padding-top: 40px;">
+        <a href="index.html" class="logo" style="justify-content: center; margin-bottom: 40px;">
+            <i data-lucide="shopping-bag"></i>
+            <span>BharatStore</span>
+        </a>
+
+        <div class="auth-container">
+            <div class="auth-image">
+                <h1>Join the BharatStore Community</h1>
+                <p>Access exclusive deals, track your orders, and enjoy a seamless premium shopping experience.</p>
+                <div style="margin-top: 40px;">
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <i data-lucide="check-circle"></i>
+                        <span>Faster Checkout Experience</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 20px;">
+                        <i data-lucide="check-circle"></i>
+                        <span>Order Tracking & History</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <i data-lucide="check-circle"></i>
+                        <span>Early Access to New Arrivals</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="auth-form-wrapper">
+                <div class="auth-tabs">
+                    <span class="auth-tab active" onclick="switchAuth('login')">Login</span>
+                    <span class="auth-tab" onclick="switchAuth('signup')">Sign Up</span>
+                </div>
+
+                <div class="social-login">
+                    <button class="social-btn">
+                        <i data-lucide="mail"></i> Google
+                    </button>
+                    <button class="social-btn">
+                        <i data-lucide="github"></i> GitHub
+                    </button>
+                </div>
+
+                <div class="divider">
+                    <span>Or continue with email</span>
+                </div>
+
+                <form id="auth-form" onsubmit="event.preventDefault(); window.location.href='index.html';">
+                    <div id="signup-fields" style="display: none;">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" placeholder="Sudhanshu Dubey">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" required placeholder="name@example.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" required placeholder="••••••••">
+                    </div>
+
+                    <div id="login-extra"
+                        style="display: flex; justify-content: space-between; margin-bottom: 25px; font-size: 0.9rem;">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="checkbox" style="width: 16px;"> Remember me
+                        </label>
+                        <a href="#" style="color: var(--primary-color);">Forgot password?</a>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 15px;"
+                        id="auth-submit">Login</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script>
+        function switchAuth(type) {
+            const tabs = document.querySelectorAll('.auth-tab');
+            const signupFields = document.getElementById('signup-fields');
+            const loginExtra = document.getElementById('login-extra');
+            const submitBtn = document.getElementById('auth-submit');
+
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            if (type === 'signup') {
+                tabs[1].classList.add('active');
+                signupFields.style.display = 'block';
+                loginExtra.style.display = 'none';
+                submitBtn.textContent = 'Create Account';
+            } else {
+                tabs[0].classList.add('active');
+                signupFields.style.display = 'none';
+                loginExtra.style.display = 'flex';
+                submitBtn.textContent = 'Login';
+            }
+        }
+
+        lucide.createIcons();
+    </script>
+</body>
+
+</html>

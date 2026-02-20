@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BharatStore | Premium eCommerce Experience</title>
+    <meta name="description" content="Shop the latest in electronics, accessories, and home decor. High-quality products with fast shipping.">
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <i data-lucide="shopping-bag"></i>
+                <span>BharatStore</span>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link active">Home</a></li>
+                <li><a href="products.html" class="nav-link">Shop</a></li>
+                <li><a href="#" class="nav-link">Categories</a></li>
+                <li><a href="#" class="nav-link">About</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <div class="search-container">
+                    <i data-lucide="search" class="search-icon"></i>
+                    <input type="text" placeholder="Search products..." class="search-input" id="global-search">
+                </div>
+                
+                <a href="login.html" class="nav-link"><i data-lucide="user"></i></a>
+                
+                <a href="cart.html" class="cart-icon-container">
+                    <i data-lucide="shopping-cart"></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h1>Elevate Your Lifestyle With Premium Goods</h1>
+                <p>Discover our curated collection of high-end electronics, minimalist accessories, and designer home essentials.</p>
+                <div class="hero-btns">
+                    <a href="products.html" class="btn btn-primary">Shop Collection</a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=800" alt="Premium Lifestyle Products">
+            </div>
+        </div>
+    </section>
+
+    <main class="container">
+        <!-- Categories Section -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <h2>Shop by Category</h2>
+                    <p>Find what you're looking for faster</p>
+                </div>
+            </div>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1491933382434-500287f9b54b?auto=format&fit=crop&q=80&w=400" alt="Electronics" class="category-img">
+                    <div class="category-overlay">
+                        <span class="category-name">Electronics</span>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&q=80&w=400" alt="Accessories" class="category-img">
+                    <div class="category-overlay">
+                        <span class="category-name">Accessories</span>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&q=80&w=400" alt="Home Decor" class="category-img">
+                    <div class="category-overlay">
+                        <span class="category-name">Home</span>
+                    </div>
+                </div>
+                <div class="category-card">
+                    <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&q=80&w=400" alt="Sports" class="category-img">
+                    <div class="category-overlay">
+                        <span class="category-name">Sports</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Featured Products -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <h2>Featured Products</h2>
+                    <p>Our top picks this week</p>
+                </div>
+                <a href="products.html" class="nav-link">View All <i data-lucide="arrow-right" style="width: 16px; display: inline;"></i></a>
+            </div>
+            <div class="product-grid" id="featured-products">
+                <!-- Products will be loaded via JS -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-info">
+                    <a href="#" class="logo footer-logo">
+                        <i data-lucide="shopping-bag"></i>
+                        <span>BharatStore</span>
+                    </a>
+                    <p>Premium quality goods for the modern individual. We curate the best products so you don't have to.</p>
+                </div>
+                <div>
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="products.html">Shop</a></li>
+                        <li><a href="#">Categories</a></li>
+                        <li><a href="#">About Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">Support</h4>
+                    <ul class="footer-links">
+                        <li><a href="#">FAQ</a></li>
+                        <li><a href="#">Shipping</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">Newsletter</h4>
+                    <p>Get the latest updates on new arrivals and sales.</p>
+                    <div class="search-container" style="margin-top: 15px;">
+                        <input type="email" placeholder="Email address" class="search-input" style="width: 100%; border-radius: 8px;">
+                        <button class="btn btn-primary" style="position: absolute; right: 5px; top: 5px; padding: 5px 15px; font-size: 0.8rem;">Join</button>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2026 BharatStore. All rights reserved. Made with ❤️ for modern shopping.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <div class="toast-icon">
+            <i data-lucide="check"></i>
+        </div>
+        <span id="toast-message">Product added to cart!</span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        // Load featured products on home page
+        document.addEventListener('DOMContentLoaded', () => {
+            const featuredGrid = document.getElementById('featured-products');
+            const featured = products.filter(p => p.isFeatured);
+            
+            featured.forEach(product => {
+                const card = createProductCard(product);
+                featuredGrid.appendChild(card);
+            });
+            
+            // Initialize Lucide icons
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>

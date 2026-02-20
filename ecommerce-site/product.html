@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Details | BharatStore</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .product-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            margin: 60px 0;
+            align-items: start;
+        }
+
+        .product-gallery {
+            border-radius: var(--radius);
+            overflow: hidden;
+            background: var(--bg-alt);
+        }
+
+        .main-image {
+            width: 100%;
+            height: 600px;
+            object-fit: cover;
+        }
+
+        .detail-info {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .detail-category {
+            text-transform: uppercase;
+            color: var(--primary-color);
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .detail-name {
+            font-size: 2.5rem;
+            line-height: 1.2;
+            color: #0f172a;
+        }
+
+        .detail-price {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .detail-desc {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin: 10px 0;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .qty-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .qty-btn:hover {
+            background: var(--bg-alt);
+        }
+
+        .qty-val {
+            font-size: 1.2rem;
+            font-weight: 600;
+            min-width: 30px;
+            text-align: center;
+        }
+
+        .action-btns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .btn-large {
+            padding: 18px;
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .specs-list {
+            margin-top: 40px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 40px;
+        }
+
+        .spec-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .spec-label {
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .product-details {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .main-image {
+                height: 400px;
+            }
+
+            .detail-name {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <i data-lucide="shopping-bag"></i>
+                <span>BharatStore</span>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="products.html" class="nav-link">Shop</a></li>
+                <li><a href="#" class="nav-link">Categories</a></li>
+                <li><a href="#" class="nav-link">About</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <div class="search-container">
+                    <i data-lucide="search" class="search-icon"></i>
+                    <input type="text" placeholder="Search products..." class="search-input" id="global-search">
+                </div>
+
+                <a href="login.html" class="nav-link"><i data-lucide="user"></i></a>
+
+                <a href="cart.html" class="cart-icon-container">
+                    <i data-lucide="shopping-cart"></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div id="product-content" class="product-details">
+            <!-- Content loaded via JS -->
+            <div style="grid-column: 1/-1; text-align: center; padding: 100px;">
+                <p>Loading product details...</p>
+            </div>
+        </div>
+
+        <!-- Related Products Area -->
+        <section class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <h2>You May Also Like</h2>
+                    <p>Similar products from our collection</p>
+                </div>
+            </div>
+            <div class="product-grid" id="related-products">
+                <!-- Loaded via JS -->
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer same as index -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                &copy; 2026 BharatStore. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast -->
+    <div id="toast" class="toast">
+        <div class="toast-icon"><i data-lucide="check"></i></div>
+        <span id="toast-message">Added!</span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        let currentProduct = null;
+        let quantity = 1;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const productId = parseInt(getUrlParam('id'));
+            currentProduct = products.find(p => p.id === productId);
+
+            if (!currentProduct) {
+                document.getElementById('product-content').innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 100px;">
+                        <h2>Product Not Found</h2>
+                        <p>The product you are looking for does not exist.</p>
+                        <a href="products.html" class="btn btn-primary" style="margin-top: 20px;">Back to Shop</a>
+                    </div>
+                `;
+                return;
+            }
+
+            renderProductDetails();
+            renderRelatedProducts();
+            lucide.createIcons();
+        });
+
+        function renderProductDetails() {
+            const content = document.getElementById('product-content');
+            content.innerHTML = `
+                <div class="product-gallery">
+                    <img src="${currentProduct.image}" alt="${currentProduct.name}" class="main-image">
+                </div>
+                <div class="detail-info">
+                    <span class="detail-category">${currentProduct.category}</span>
+                    <h1 class="detail-name">${currentProduct.name}</h1>
+                    <div class="product-rating">
+                        ${generateRatingStars(currentProduct.rating)}
+                        <span class="rating-text">(${currentProduct.rating} Score)</span>
+                    </div>
+                    <span class="detail-price">$${currentProduct.price.toFixed(2)}</span>
+                    <p class="detail-desc">${currentProduct.description}</p>
+                    
+                    <div class="quantity-selector">
+                        <span style="font-weight: 600;">Quantity:</span>
+                        <button class="qty-btn" onclick="updateQty(-1)"><i data-lucide="minus"></i></button>
+                        <span class="qty-val" id="qty-val">1</span>
+                        <button class="qty-btn" onclick="updateQty(1)"><i data-lucide="plus"></i></button>
+                    </div>
+
+                    <div class="action-btns">
+                        <button class="btn btn-primary btn-large" onclick="handleAddToCart()">
+                            Add to Cart
+                        </button>
+                        <button class="btn btn-large" style="border: 1px solid var(--border-color);">
+                            Buy Now
+                        </button>
+                    </div>
+
+                    <div class="specs-list">
+                        <h3>Specifications</h3>
+                        <div class="spec-item">
+                            <span class="spec-label">Warranty</span>
+                            <span>1 Year Local Manufacturer Warranty</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Shipping</span>
+                            <span>Free worldwide shipping</span>
+                        </div>
+                        <div class="spec-item">
+                            <span class="spec-label">Return Policy</span>
+                            <span>30-day money-back guarantee</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function updateQty(change) {
+            quantity = Math.max(1, quantity + change);
+            document.getElementById('qty-val').textContent = quantity;
+        }
+
+        function handleAddToCart() {
+            for (let i = 0; i < quantity; i++) {
+                addToCart(currentProduct.id);
+            }
+        }
+
+        function renderRelatedProducts() {
+            const relatedGrid = document.getElementById('related-products');
+            const related = products
+                .filter(p => p.category === currentProduct.category && p.id !== currentProduct.id)
+                .slice(0, 4);
+
+            related.forEach(product => {
+                relatedGrid.appendChild(createProductCard(product));
+            });
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping Cart | BharatStore</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .cart-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+        }
+
+        .cart-items {
+            background: #fff;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+        }
+
+        .cart-item {
+            display: grid;
+            grid-template-columns: 100px 2fr 1fr auto;
+            gap: 20px;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .cart-item-info h3 {
+            font-size: 1.1rem;
+            margin-bottom: 5px;
+        }
+
+        .cart-item-info p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .cart-qty-control {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 5px;
+            width: fit-content;
+        }
+
+        .remove-item {
+            color: #ef4444;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .remove-item:hover {
+            opacity: 0.7;
+        }
+
+        .cart-summary {
+            background: #fff;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            padding: 30px;
+            align-self: flex-start;
+            position: sticky;
+            top: 100px;
+        }
+
+        .summary-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            color: var(--text-muted);
+        }
+
+        .summary-row.total {
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+            margin-top: 20px;
+            color: var(--text-color);
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+
+        @media (max-width: 992px) {
+            .cart-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .cart-item {
+                grid-template-columns: 80px 1fr;
+                gap: 15px;
+            }
+
+            .cart-item-img {
+                width: 80px;
+                height: 80px;
+                grid-row: span 2;
+            }
+
+            .cart-item-info {
+                grid-column: 2;
+            }
+
+            .cart-qty-control {
+                grid-column: 2;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <i data-lucide="shopping-bag"></i>
+                <span>BharatStore</span>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="products.html" class="nav-link">Shop</a></li>
+                <li><a href="#" class="nav-link">Categories</a></li>
+                <li><a href="#" class="nav-link">About</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <a href="cart.html" class="cart-icon-container">
+                    <i data-lucide="shopping-cart"></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <h1 style="margin: 40px 0 20px;">Your Shopping Cart</h1>
+
+        <div id="cart-empty" style="display: none; text-align: center; padding: 100px;">
+            <i data-lucide="shopping-cart"
+                style="width: 60px; height: 60px; color: var(--border-color); margin-bottom: 20px;"></i>
+            <h2>Your cart is empty</h2>
+            <p style="color: var(--text-muted); margin-bottom: 30px;">Looks like you haven't added anything to your cart
+                yet.</p>
+            <a href="products.html" class="btn btn-primary">Start Shopping</a>
+        </div>
+
+        <div id="cart-content" class="cart-grid">
+            <div class="cart-items" id="cart-items-list">
+                <!-- Items loaded via JS -->
+            </div>
+
+            <div class="cart-summary">
+                <h2 class="summary-title">Order Summary</h2>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <span id="summary-subtotal">$0.00</span>
+                </div>
+                <div class="summary-row">
+                    <span>Shipping</span>
+                    <span>Free</span>
+                </div>
+                <div class="summary-row">
+                    <span>Tax (GST 18%)</span>
+                    <span id="summary-tax">$0.00</span>
+                </div>
+                <div class="summary-row total">
+                    <span>Grand Total</span>
+                    <span id="summary-total">$0.00</span>
+                </div>
+                <a href="checkout.html" class="btn btn-primary"
+                    style="width: 100%; margin-top: 30px; text-align: center;">Proceed to Checkout</a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                &copy; 2026 BharatStore. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCart();
+            lucide.createIcons();
+        });
+
+        function renderCart() {
+            const emptyState = document.getElementById('cart-empty');
+            const cartContent = document.getElementById('cart-content');
+            const itemsList = document.getElementById('cart-items-list');
+
+            if (cart.length === 0) {
+                emptyState.style.display = 'block';
+                cartContent.style.display = 'none';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            cartContent.style.display = 'grid';
+            itemsList.innerHTML = '';
+
+            let subtotal = 0;
+
+            cart.forEach((item, index) => {
+                subtotal += item.price * item.quantity;
+
+                const itemEl = document.createElement('div');
+                itemEl.className = 'cart-item';
+                itemEl.innerHTML = `
+                    <img src="${item.image}" alt="${item.name}" class="cart-item-img">
+                    <div class="cart-item-info">
+                        <h3>${item.name}</h3>
+                        <p>${item.category}</p>
+                        <p style="font-weight: 600; margin-top: 5px;">$${item.price.toFixed(2)}</p>
+                    </div>
+                    <div class="cart-qty-control">
+                        <button onclick="updateCartItemQty(${index}, -1)" style="font-size: 1.2rem; padding: 0 8px;">-</button>
+                        <span>${item.quantity}</span>
+                        <button onclick="updateCartItemQty(${index}, 1)" style="font-size: 1.2rem; padding: 0 8px;">+</button>
+                    </div>
+                    <div class="remove-item" onclick="removeCartItem(${index})">
+                        <i data-lucide="trash-2"></i>
+                    </div>
+                `;
+                itemsList.appendChild(itemEl);
+            });
+
+            updateSummary(subtotal);
+            lucide.createIcons();
+        }
+
+        function updateCartItemQty(index, change) {
+            cart[index].quantity = Math.max(1, cart[index].quantity + change);
+            saveCart();
+            updateCartCount();
+            renderCart();
+        }
+
+        function removeCartItem(index) {
+            cart.splice(index, 1);
+            saveCart();
+            updateCartCount();
+            renderCart();
+        }
+
+        function updateSummary(subtotal) {
+            const tax = subtotal * 0.18;
+            const total = subtotal + tax;
+
+            document.getElementById('summary-subtotal').textContent = `$${subtotal.toFixed(2)}`;
+            document.getElementById('summary-tax').textContent = `$${tax.toFixed(2)}`;
+            document.getElementById('summary-total').textContent = `$${total.toFixed(2)}`;
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | BharatStore</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+        }
+
+        .checkout-form {
+            background: #fff;
+            padding: 40px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+        }
+
+        .form-section h2 {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-alt);
+            font-family: inherit;
+            outline: none;
+            transition: var(--transition);
+        }
+
+        input:focus {
+            border-color: var(--primary-color);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .payment-option {
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .payment-option.active {
+            border-color: var(--primary-color);
+            background: #eff6ff;
+        }
+
+        .order-review {
+            background: var(--bg-alt);
+            padding: 30px;
+            border-radius: var(--radius);
+            align-self: flex-start;
+            position: sticky;
+            top: 100px;
+        }
+
+        .review-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        @media (max-width: 992px) {
+            .checkout-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <i data-lucide="shopping-bag"></i>
+                <span>BharatStore</span>
+            </a>
+            <div class="step-indicator" style="color: var(--text-muted); font-weight: 500;">
+                Cart > <span style="color: var(--primary-color)">Checkout</span> > Success
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="checkout-grid">
+            <div class="checkout-form">
+                <form id="checkout-form" onsubmit="event.preventDefault(); showSuccess();">
+                    <div class="form-section">
+                        <h2>Shipping Address</h2>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>First Name</label>
+                                <input type="text" required placeholder="Sudhanshu">
+                            </div>
+                            <div class="form-group">
+                                <label>Last Name</label>
+                                <input type="text" required placeholder="Dubey">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Street Address</label>
+                            <input type="text" required placeholder="123 Luxury Ave">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>City</label>
+                                <input type="text" required placeholder="Bangalore">
+                            </div>
+                            <div class="form-group">
+                                <label>Postal Code</label>
+                                <input type="text" required placeholder="560001">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <h2>Payment Method</h2>
+                        <div class="payment-methods">
+                            <div class="payment-option active">
+                                <i data-lucide="credit-card"></i>
+                                <span>Credit Card</span>
+                            </div>
+                            <div class="payment-option">
+                                <i data-lucide="wallet"></i>
+                                <span>UPI / QR</span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Card Number</label>
+                            <input type="text" required placeholder="0000 0000 0000 0000">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Expiry Date</label>
+                                <input type="text" required placeholder="MM/YY">
+                            </div>
+                            <div class="form-group">
+                                <label>CVC</label>
+                                <input type="password" required placeholder="***">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-large" style="width: 100%;">Complete
+                        Purchase</button>
+                </form>
+            </div>
+
+            <div class="order-review">
+                <h3 style="margin-bottom: 20px;">Order Summary</h3>
+                <div id="review-items-list">
+                    <!-- Loaded via JS -->
+                </div>
+                <div style="border-top: 1px solid var(--border-color); margin-top: 20px; padding-top: 20px;">
+                    <div class="review-item" style="font-weight: 700; font-size: 1.1rem;">
+                        <span>Final Total</span>
+                        <span id="review-total">$0.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Success Modal -->
+    <div id="success-modal"
+        style="display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 3000; align-items: center; justify-content: center;">
+        <div style="background: #fff; padding: 50px; border-radius: 20px; text-align: center; max-width: 450px;">
+            <div
+                style="background: #22c55e; color: #fff; width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 25px;">
+                <i data-lucide="check" style="width: 40px; height: 40px;"></i>
+            </div>
+            <h2 style="font-size: 1.8rem; margin-bottom: 15px;">Order Placed!</h2>
+            <p style="color: var(--text-muted); margin-bottom: 30px;">Your purchase was successful. We'll send you a
+                confirmation email shortly.</p>
+            <a href="index.html" class="btn btn-primary" onclick="localStorage.removeItem('cart')">Back to Home</a>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            if (cart.length === 0) {
+                window.location.href = 'products.html';
+                return;
+            }
+            renderReview();
+            lucide.createIcons();
+        });
+
+        function renderReview() {
+            const list = document.getElementById('review-items-list');
+            let subtotal = 0;
+
+            cart.forEach(item => {
+                subtotal += item.price * item.quantity;
+                const div = document.createElement('div');
+                div.className = 'review-item';
+                div.innerHTML = `
+                    <span>${item.name} x${item.quantity}</span>
+                    <span>$${(item.price * item.quantity).toFixed(2)}</span>
+                `;
+                list.appendChild(div);
+            });
+
+            const total = subtotal + (subtotal * 0.18);
+            document.getElementById('review-total').textContent = `$${total.toFixed(2)}`;
+        }
+
+        function showSuccess() {
+            document.getElementById('success-modal').style.display = 'flex';
+            lucide.createIcons();
+        }
+    </script>
+</body>
+
+</html>

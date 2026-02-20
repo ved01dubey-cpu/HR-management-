@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Products | BharatStore</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        .shop-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 40px;
+            margin: 40px 0;
+        }
+
+        .filters-sidebar {
+            background: #fff;
+            padding: 25px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-color);
+            align-self: flex-start;
+            position: sticky;
+            top: 100px;
+        }
+
+        .filter-section {
+            margin-bottom: 30px;
+        }
+
+        .filter-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .category-list li {
+            margin-bottom: 10px;
+        }
+
+        .category-list label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: var(--transition);
+        }
+
+        .category-list label:hover {
+            color: var(--primary-color);
+        }
+
+        input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+
+        .shop-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .sort-select {
+            padding: 8px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: #fff;
+            outline: none;
+        }
+
+        @media (max-width: 768px) {
+            .shop-container {
+                grid-template-columns: 1fr;
+            }
+
+            .filters-sidebar {
+                display: none;
+                /* In real site, we'd add a mobile drawer */
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <i data-lucide="shopping-bag"></i>
+                <span>BharatStore</span>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="products.html" class="nav-link active">Shop</a></li>
+                <li><a href="#" class="nav-link">Categories</a></li>
+                <li><a href="#" class="nav-link">About</a></li>
+            </ul>
+
+            <div class="nav-actions">
+                <div class="search-container">
+                    <i data-lucide="search" class="search-icon"></i>
+                    <input type="text" placeholder="Search products..." class="search-input" id="global-search">
+                </div>
+
+                <a href="login.html" class="nav-link"><i data-lucide="user"></i></a>
+
+                <a href="cart.html" class="cart-icon-container">
+                    <i data-lucide="shopping-cart"></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="shop-container">
+            <!-- Sidebar Filters -->
+            <aside class="filters-sidebar">
+                <div class="filter-section">
+                    <span class="filter-title">Categories</span>
+                    <ul class="category-list" id="category-filters">
+                        <li>
+                            <label><input type="checkbox" name="category" value="Electronics"> Electronics</label>
+                        </li>
+                        <li>
+                            <label><input type="checkbox" name="category" value="Accessories"> Accessories</label>
+                        </li>
+                        <li>
+                            <label><input type="checkbox" name="category" value="Home"> Home</label>
+                        </li>
+                        <li>
+                            <label><input type="checkbox" name="category" value="Sports"> Sports</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="filter-section">
+                    <span class="filter-title">Price Range</span>
+                    <input type="range" min="0" max="1000" step="50" style="width: 100%;">
+                    <div
+                        style="display: flex; justify-content: space-between; margin-top: 10px; font-size: 0.8rem; color: var(--text-muted);">
+                        <span>$0</span>
+                        <span>$1000</span>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" style="width: 100%;" onclick="applyFilters()">Apply Filters</button>
+            </aside>
+
+            <!-- Product Grid Area -->
+            <div class="shop-content">
+                <div class="shop-header">
+                    <h2 id="results-count">Showing all products</h2>
+                    <select class="sort-select" onchange="sortProducts(this.value)">
+                        <option value="default">Default Sorting</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="rating">Top Rated</option>
+                    </select>
+                </div>
+
+                <div class="product-grid" id="shop-grid">
+                    <!-- Products loaded via JS -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer same as index -->
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                &copy; 2026 BharatStore. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    <!-- Toast -->
+    <div id="toast" class="toast">
+        <div class="toast-icon"><i data-lucide="check"></i></div>
+        <span id="toast-message">Added!</span>
+    </div>
+
+    <!-- Scripts -->
+    <script src="js/data.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        let filteredProducts = [...products];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const searchQuery = getUrlParam('search');
+            if (searchQuery) {
+                document.getElementById('global-search').value = searchQuery;
+                filterBySearch(searchQuery);
+            } else {
+                renderProducts(products);
+            }
+            lucide.createIcons();
+        });
+
+        function renderProducts(items) {
+            const grid = document.getElementById('shop-grid');
+            grid.innerHTML = '';
+
+            if (items.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; padding: 100px;">No products found.</p>';
+                return;
+            }
+
+            items.forEach(product => {
+                grid.appendChild(createProductCard(product));
+            });
+
+            document.getElementById('results-count').textContent = `Showing ${items.length} products`;
+            lucide.createIcons();
+        }
+
+        function filterBySearch(query) {
+            filteredProducts = products.filter(p =>
+                p.name.toLowerCase().includes(query.toLowerCase()) ||
+                p.category.toLowerCase().includes(query.toLowerCase())
+            );
+            renderProducts(filteredProducts);
+        }
+
+        function applyFilters() {
+            const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked'))
+                .map(cb => cb.value);
+
+            if (selectedCategories.length === 0) {
+                filteredProducts = [...products];
+            } else {
+                filteredProducts = products.filter(p => selectedCategories.includes(p.category));
+            }
+
+            renderProducts(filteredProducts);
+        }
+
+        function sortProducts(criteria) {
+            if (criteria === 'price-low') {
+                filteredProducts.sort((a, b) => a.price - b.price);
+            } else if (criteria === 'price-high') {
+                filteredProducts.sort((a, b) => b.price - a.price);
+            } else if (criteria === 'rating') {
+                filteredProducts.sort((a, b) => b.rating - a.rating);
+            } else {
+                filteredProducts = [...products];
+            }
+            renderProducts(filteredProducts);
+        }
+    </script>
+</body>
+
+</html>
